@@ -25,7 +25,8 @@ def existeDrush():
 	return True
 
 if(os.path.exists(argumentos['ruta'])):
-	if(not os.path.exists("~/.config/composer/vendor/drush/drush/")):
+	home=os.popen("echo $HOME").readline()[0:-1]
+	if(not os.path.exists(home+"/.config/composer/vendor/drush/drush")):
 		print("No existe Drush")
 		print("Instalando Drush ...")
 		s = os.popen("\
@@ -39,7 +40,8 @@ if(os.path.exists(argumentos['ruta'])):
 	if(not os.path.isfile("/usr/bin/git")):
 		print("No existe Git")
 		print("Instalando Git")
-		os.popen("sudo apt-get install git")
+		os.popen("sudo apt-get install git -y").readlines()
+	
 	
 
 else:
