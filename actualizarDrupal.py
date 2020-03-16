@@ -22,23 +22,24 @@ argumentos=parse().__dict__
 def existeDrush():
 	if(os.path.exists("~/.config/composer/vendor/drush/drush/")):
 		return True
-
 	return True
 
 if(os.path.exists(argumentos['ruta'])):
 	if(not os.path.exists("~/.config/composer/vendor/drush/drush/")):
 		print("No existe Drush")
 		print("Instalando Drush ...")
-		s = os.popen("su - ;\
+		s = os.popen("\
 			curl -sS https://getcomposer.org/installer | php7.3;\
-			mv composer.phar /usr/local/bin/composer;\
+			sudo mv composer.phar /usr/local/bin/composer;\
 			composer global require drush/drush:8.x;\
-			echo 'export PATH=$PATH:$HOME/.config/composer/vendor/drush/drush' >> $HOME/.bashrc;\
-			source ~/.bashrc;\
+			sudo echo 'export PATH=$PATH:$HOME/.config/composer/vendor/drush/drush' >> /etc/bash.bashrc;\
+			source /etc/bash.bashrc;\
 			").readlines()
 		print("Se ha instalado Drush",s)
-	if(not os.path.isFile("/usr/bin/git")):
+	if(not os.path.isfile("/usr/bin/git")):
 		print("No existe Git")
+		print("Instalando Git")
+		os.popen("sudo apt-get install git")
 	
 
 else:
