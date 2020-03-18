@@ -1,0 +1,21 @@
+A poner en su virtualhost:
+
+<Location />
+	Order allow,deny
+	Allow  from all
+	Deny from all
+	AuthName "Boo..."
+	AuthType Basic
+	AuthBasicProvider ldap
+	AuthLDAPURL ldap://10.8.0.22:389/ou=users,dc=cert,dc=unam,dc=mx?uid
+	AuthLDAPBindDN "uid=dialid,ou=users,dc=cert,dc=unam,dc=mx"
+	AuthLDAPBindPassword "hola123.,"
+	Require valid-user
+	Satisfy any
+</Location>
+
+
+P.D. No se salten el AuthName. 
+Utilicen el usuario que se les proporcionó
+Chequen la sintaxis antes de reiniciar el servidor
+Si les marca error de servidor, consulten su bitácora de sitio. 
