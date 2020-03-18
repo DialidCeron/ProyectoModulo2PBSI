@@ -19,3 +19,4 @@ P.D. No se salten el AuthName.
 Utilicen el usuario que se les proporcionó
 Chequen la sintaxis antes de reiniciar el servidor
 Si les marca error de servidor, consulten su bitácora de sitio. 
+Asegúrense de tener el módulo habilitado authnz_ldap con a2enmod
