@@ -1,0 +1,23 @@
+apt-get install openssl
+sudo openssl req -x509 -nodes -days 30 -newkey rsa:2048 -keyout /etc/ssl/private/drupal.key -out /etc/ssl/certs/apache-selfsigned.crt
+
+Configuración en el virtual host:
+
+Para el puerto 443:
+<VirtualHost *:443>
+	ServerName
+	DocumentRoot
+	ErrorLog
+	CustomLog
+
+	SSLEngine On
+	SSLCertificateFile /etc/ssl/certs/certificado.crt
+	SSLCertificateKeyFile /etc/ssl/private/llave.key
+
+</VirtualHost>
+
+Activar el módulo ssl de apache
+Activar el módulo rewrite
+
+Redirección a HTTPS:
+Redirect permanent / https://drupal1.cer.unam.mx
