@@ -11,6 +11,8 @@ mv drupal2.conf /etc/apache2/sites-available
 mv apache2.conf /etc/apache2/
 mv security.conf /etc/apache2/conf-available
 
+mv drupal.crt /etc/ssl/certs/
+mv drupal.key /etc/ssl/private
 
 
 
