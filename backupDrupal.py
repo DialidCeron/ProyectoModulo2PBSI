@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import argparse
-from os import path,popen,scandir, getcwd, pardir,system
+from os import path,popen,listdir,getcwd, pardir,system
 from datetime import datetime
 import subprocess
 
@@ -33,8 +33,8 @@ def comprimirDirectorio(ruta,destino=""):
 	return False
 
 def obtenerSitiosDrupal(ruta):
-	sitiosDrupal=[archivo.name for archivo in scandir(ruta) if archivo.is_dir() and \
-		len(popen("cd "+path.join(ruta,archivo.name)+";drush status | grep -i drupal").readlines())>0 ]
+	sitiosDrupal=[archivo for archivo in listdir(ruta) if path.isdir(path.join(ruta,archivo)) and \
+		len(popen("cd "+path.join(ruta,archivo)+";drush status | grep -i drupal").readlines())>0 ]
 
 	return sitiosDrupal
 
