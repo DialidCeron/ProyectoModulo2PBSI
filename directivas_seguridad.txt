@@ -1,0 +1,19 @@
+Directivas de seguridad agregadas a los VirtualHost
+Activar el módulo headers de apache
+
+De los sitios:
+<Directory />
+	Options -Indexes
+	AllowOverride All
+	Require all granted
+	RewriteEngine on
+	RedirectMatch (.*install.*|.*update.*|.config$|.txt$|.git$) /
+</Directory>
+
+
+Del archivo /etc/apache2/conf-available/security.conf:
+ServerSignature Off
+ServerTokens ProductOnly
+Header set X-Frame-Options: deny
+Header set X-XSS-Protection "1; mode=block"
+Header set X-Content-Type-Options: "nosniff"
