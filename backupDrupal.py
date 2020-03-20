@@ -18,7 +18,6 @@ def parse():
 
 	return parser.parse_args()
 
-home=popen("echo $HOME").readline()[0:-1]
 directorioActual=getcwd()
 
 def comprimirDirectorio(ruta,destino=""):
@@ -49,13 +48,14 @@ color = {
 def realizarRespaldoDeSitios(ruta):
 	if(path.exists(ruta)):
 		if(system("drush version 1>/tmp/null 2>/tmp/null") != 0):
+			home=popen("echo $HOME").readline()[0:-1]
 			print("No existe Drush")
 			print("Instalando Drush ...")
 			out=popen("\
 				curl -sS https://getcomposer.org/installer | php7.3;\
 				sudo mv composer.phar /usr/local/bin/composer;\
 				composer global require drush/drush:8.x;\
-				sudo set -i '$a  export PATH=$PATH:$HOME/.config/composer/vendor/drush/drush/drush' /etc/bash.bashrc\
+				sudo sed -i '$a  export PATH=$PATH:"+home+"/.config/composer/vendor/drush/drush' /etc/bash.bashrc\
 				").readlines()
 			print(color['verde']+"Se ha instalado Drush"+color['off'],out)
 			print(color['cyan']+"Ahora basta con escribir el comando:"+color['off']+color['verde']+"source /etc/bash.bashrc"+color['off'])
