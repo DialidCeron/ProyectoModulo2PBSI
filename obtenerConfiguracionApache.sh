@@ -1,4 +1,10 @@
 #!/bin/bash
+
+#COLORSITOS
+
+Color_Off='\033[0m'
+Verde='\033[0;32m'
+
 cp /var/www/drupal1/.htaccess ./.htaccess1
 cp /var/www/drupal2/.htaccess ./.htaccess2
 
@@ -14,3 +20,4 @@ cp /etc/ssl/private/drupal.key
 tar -czvf configuracionApache.tar.gz .htaccess1 .htaccess2 drupal1.conf drupal2.conf apache2.conf security.conf
 rm .htaccess1 .htaccess2 drupal1.conf drupal2.conf security.conf apache2.conf drupal.crt drupal.key
 
+echo -e "$Verde \n Configuración de Apache obtenida $Color_Off"
