@@ -21,7 +21,7 @@ mv apache2.conf /etc/apache2/
 mv security.conf /etc/apache2/conf-available
 
 mv drupal.crt /etc/ssl/certs/
-mv drupal.key /etc/ssl/private
+mv drupal.key /etc/ssl/private/
 
 echo -e "$Verde \n Configuración de Apache restablecida $Color_Off"
 echo -e "$Cyan \n Actualizando el archivo /etc/hosts.. $Color_Off"
