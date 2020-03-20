@@ -38,26 +38,37 @@ def obtenerSitiosDrupal(ruta):
 
 	return sitiosDrupal
 
-argumentos=parse().__dict__
 
-if __name__ == '__main__':
-	ruta=argumentos["ruta"]
+color = {
+	'verde':'\033[0;32m',
+	'rojo':'\033[0;31m',
+	'off':'\033[0m',
+	'cyan':'\033[0;36m'
+}
+
+def realizarRespaldoDeSitios(ruta):
 	if(path.exists(ruta)):
-		if(not path.exists(home+"/.config/composer/vendor/drush/drush")):
+		if(system("drush version 1>/tmp/null 2>/tmp/null") != 0):
 			print("No existe Drush")
 			print("Instalando Drush ...")
-			s = popen("\
+			out=popen("\
 				curl -sS https://getcomposer.org/installer | php7.3;\
 				sudo mv composer.phar /usr/local/bin/composer;\
 				composer global require drush/drush:8.x;\
-				sudo echo 'export PATH=$PATH:$HOME/.config/composer/vendor/drush/drush' >> /etc/bash.bashrc;\
-				source /etc/bash.bashrc;\
+				sudo set -i '$a  export PATH=$PATH:$HOME/.config/composer/vendor/drush/drush/drush' /etc/bash.bashrc\
 				").readlines()
-			print("Se ha instalado Drush",s)
+			print(color['verde']+"Se ha instalado Drush"+color['off'],out)
+			print(color['cyan']+"Ahora basta con escribir el comando:"+color['off']+color['verde']+"source /etc/bash.bashrc"+color['off'])
+			print("para poder volver a ejecutar este programa de nuevo.")
+			exit()
 		if(not path.isfile("/usr/bin/git")):
 			print("No existe Git")
 			print("Instalando Git")
-			popen("sudo apt-get install git -y").readlines()
+			if (system("sudo apt-get install git -y 1>/tmp/null")==0):
+				print(color['verde']+"Se instalo de forma correcta GIT"+color['off'])
+			else:
+				print(color['rojo']+"No se pudo instalar GIT"+color['off'])
+
 
 		print("------------------------------------------------------")
 		print("\t\tBuscando sitios drupal en "+ruta)
@@ -69,30 +80,36 @@ if __name__ == '__main__':
 		i=0
 		for ndirectorio in sitiosDrupal:
 			i=i+1;
-			print("{0}) {1} ".format(i,ndirectorio))
+			print("{0}{1}) {2} {3}".format(color['verde'],i,ndirectorio,color['off']))
 
 		print("------------------------------------------------------")
 		print("				Respaldando sitios");
 		print("------------------------------------------------------")
 
 		sitiosRespaldados={}
-		for sitio in sitiosDrupal:
-			print("-----> Respaldando sitio "+sitio)
-			rutaSitio=path.join(ruta,sitio)
-			if comprimirDirectorio(rutaSitio):
-				print("El sitio {0} se comprimio de forma correcta.".format(sitio))
-				if (system("cd "+rutaSitio+"; drush -v sql-dump --result-file="+\
-					path.join(directorioActual,"backup-"+sitio+"_"+\
-						datetime.now().strftime("%d-%m-%Y_%H:%M:%S")+".sql > /tmp/null"))==0):
-					print("Se realizo el respaldo de la base de datos correctamente del sitio: "+sitio)
-					sitiosRespaldados[sitio]=True
-				else:
-					print(">>>>>> No se pudo realizar el resplado de la base de datos  <<<<<<<<")
-					sitiosRespaldados[sitio]=False
-
-		
-
-
-
+		if(len(sitiosDrupal)>0):
+			for sitio in sitiosDrupal:
+				print("----------------> Respaldando sitio "+sitio+"<----------------")
+				rutaSitio=path.join(ruta,sitio)
+				if comprimirDirectorio(rutaSitio):
+					print(color['verde']+"El sitio {0} se comprimio de forma correcta.{1}".format(sitio,color['off']))
+					if (system("cd "+rutaSitio+"; drush -v sql-dump --result-file="+\
+						path.join(directorioActual,"backup-"+sitio+"_"+\
+							datetime.now().strftime("%d-%m-%Y_%H:%M:%S")+".sql"))==0):
+						print(color['verde']+"Se realizo el respaldo de la base de datos correctamente del sitio: "+sitio+color['off'])
+						print()
+						sitiosRespaldados[sitio]=True
+					else:
+						print(color['rojo']+">>>>>> No se pudo realizar el respaldo de la base de datos de "+sitio+" <<<<<<<<"+color['off'])
+						print()
+						sitiosRespaldados[sitio]=False
+		else:
+			print("No se encontraron sitios Drupal")
+	
 	else:
-		print("El directorio que ha ingresado no existe o no se puede acceder.")
+		print(color['rojo']+"1,31m El directorio que ha ingresado no existe o no se puede acceder."+color['off'])
+
+if __name__ == '__main__':
+	argumentos=parse().__dict__
+	ruta=argumentos["ruta"]
+	realizarRespaldoDeSitios(ruta)
