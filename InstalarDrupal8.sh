@@ -20,5 +20,7 @@ ln -s /usr/local/src/drush/drush /usr/bin/drush
 composer install
 #INSTALAR DRUPAL 8
 drush dl drupal-8.8.4
-mv /usr/local/src/drush/drupal-8.8.4 /var/www/sitio1
+mv /usr/local/src/drush/drupal-8.8.4 /var/www/drupal1
+drush dl drupal-8.8.4
+mv /usr/local/src/drush/drupal-8.8.4 /var/www/drupal2
 
