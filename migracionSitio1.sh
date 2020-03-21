@@ -1,4 +1,4 @@
-cd /var/www/Drupal1
+cd /var/www/drupal1
 #INSTALAR MODULOS NECESARIOS PARA LA MIGRACION
 echo "Instalando modulos";
 sudo drush en migrate_tools -y 
@@ -13,31 +13,8 @@ read contra;
 echo "IP de la bd";
 read ip;
 
-echo "
-#// Database entry for `drush migrate-upgrade --configure-only`
-$databases['upgrade']['default'] = array (
- 'database' => '$dbname',
- 'username' => '$dbuser',
- 'password' => '$dbpass',
- 'prefix' => '',
- 'host' => '$ip',
- 'port' => '5432',
- 'namespace' => 'Drupal\\Core\\Database\\Driver\\pgsql',
- 'driver' => 'pgsql',
-);
-#// Database entry for `drush migrate-import --all`
-$databases['migrate']['default'] = array (
- 'database' => 'dbname',
- 'username' => 'dbuser',
- 'password' => 'dbpass',
- 'prefix' => '',
- 'host' => 'localhost',
- 'port' => '5432',
- 'namespace' => 'Drupal\\Core\\Database\\Driver\\pgsql',
- 'driver' => 'pgsql',
-);" >> /var/www/Drupal1/sites/default/setting.php
-
 echo "Proceso de migración";
-sudo drush migrate-upgrade
+sudo drush migrate-upgrade --configure-only --legacy-db-url=pgsql://$dbuser:$dbpass@$ip/$dbname --legacy-root=/var/www/drupal/sites/default/files
 #sudo drush migrate-status
-drush migrate-import --all
+sudo drush migrate-import --all
+
