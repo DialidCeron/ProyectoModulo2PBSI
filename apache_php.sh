@@ -10,19 +10,19 @@ Rojo='\033[0;31m'
 echo -e "$Cyan \n Actualizando Sistema Operativo.. $Color_Off"
 sudo apt-get update -y > bitacora.log 2>&1
 
-if [[ $(grep -c "Err\|Fallo\|Error\|error") !="0" ]]; then
+if [[ $(grep -c "Err\|Fallo\|Error\|error" bitacora.log) !="0" ]]; then
 	echo -e "$Rojo \n Fallo al actualizar el Sistema Operativo $Color_Off"
 #&& sudo apt-get upgrade -y
 else 
 	echo -e "$Cyan \n Instalando Apache2.. $Color_Off"
 	sudo apt-get install apache2 apache2-doc apache2-utils -y >> bitacora.log 2>&1
-	if [[ $(grep -c "Err\|Fallo\|Error\|error") !="0" ]]; then
+	if [[ $(grep -c "Err\|Fallo\|Error\|error" bitacora.log) !="0" ]]; then
 		echo -e "$Rojo \n Fallo al instalar apache, deshaciendo los cambios... $Color_Off"
 		sudo apt-get remove apache2 apache2-doc apache2-utils -y >> bitacora.log 2>&1
 	else
 		echo -e "$Cyan \n Instalando PHP y Requerimientos $Color_Off"
 		sudo apt-get install libapache2-mod-php php-common php-curl php-dev php-gd php-pear php-imagick php-xml php-mbstring php-cli -y >> bitacora.log 2>&1
-		if [[ $(grep -c "Err\|Fallo\|Error\|error") !="0" ]]; then
+		if [[ $(grep -c "Err\|Fallo\|Error\|error" bitacora.log) !="0" ]]; then
 			echo -e "$Rojo \n Fallo al instalar PHP y dependencias, deshaciendo los cambios... $Color_Off"
 			sudo apt-get remove libapache2-mod-php php-common php-curl php-dev php-gd php-pear php-imagick php-xml php-mbstring php-cli -y >> bitacora.log 2>&1
 		else
