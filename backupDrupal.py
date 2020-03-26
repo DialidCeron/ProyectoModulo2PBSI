@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import argparse
+from colores import color
 from os import path,popen,listdir,getcwd, pardir,system
 from datetime import datetime
 import subprocess
@@ -11,7 +12,6 @@ def parse():
 	parser = argparse.ArgumentParser(   prog = 'Actualizador de drupal 7 al 8',
 										usage= 'python3 actualizarDrupal.py -d directorioDelSitio',
                                         description = 'Script para la migración de Drupal 7 a Drupal 8.')
-
 	groupListaUsuarios = parser.add_mutually_exclusive_group()
 	parser.add_argument('-d','--directory',  type=str, help='Ruta del directorio en el que se encuentran\
 		los sitios drupal: Por default buscara en /var/www',dest='ruta',nargs='?',const='/var/www',default='/var/www')
@@ -37,13 +37,14 @@ def obtenerSitiosDrupal(ruta):
 
 	return sitiosDrupal
 
-
-color = {
-	'verde':'\033[0;32m',
-	'rojo':'\033[0;31m',
-	'off':'\033[0m',
-	'cyan':'\033[0;36m'
-}
+#Los datos llave-valor que recopila esta función son 6, los cuales se escriben uno por cada linea
+def guardarInfoBaseDeDatos(rutaSitio,nombreArchivo):
+	if system("cd "+rutaSitio+"; drush status | tr -d ' ' | grep -i database >> "\
+		+path.join(directorioActual,nombreArchivo)) != 0:
+		print(color['rojo']+"Error: No se logró obtener información de la base de datos"+color['off'],out)
+		
+		
+		
 
 def realizarRespaldoDeSitios(ruta):
 	if(path.exists(ruta)):
@@ -93,16 +94,29 @@ def realizarRespaldoDeSitios(ruta):
 				rutaSitio=path.join(ruta,sitio)
 				if comprimirDirectorio(rutaSitio):
 					print(color['verde']+"El sitio {0} se comprimio de forma correcta.{1}".format(sitio,color['off']))
-					if (system("cd "+rutaSitio+"; drush -v sql-dump --result-file="+\
-						path.join(directorioActual,"backup-"+sitio+"_"+\
-							datetime.now().strftime("%d-%m-%Y_%H:%M:%S")+".sql"))==0):
-						print(color['verde']+"Se realizo el respaldo de la base de datos correctamente del sitio: "+sitio+color['off'])
-						print()
-						sitiosRespaldados[sitio]=True
-					else:
-						print(color['rojo']+">>>>>> No se pudo realizar el respaldo de la base de datos de "+sitio+" <<<<<<<<"+color['off'])
-						print()
-						sitiosRespaldados[sitio]=False
+					nombreBackupBD="backup-"+sitio+"_"+\
+							datetime.now().strftime("%d-%m-%Y_%H_%M_%S")
+					opcion="y"
+					while(opcion=="y"):
+						opcion="n"
+						if (system("cd "+rutaSitio+"; drush -v sql-dump --result-file="+\
+							path.join(directorioActual,nombreBackupBD+".sql"))==0):
+							a=open("reporteSitiosBackup.info",'a')
+							a.write("sitio:"+sitio+"\n")
+							a.write("backupSitioName:"+sitio+".tar.gz\n")
+							a.write("backupDB:"+nombreBackupBD+"\n")
+							a.close()
+							guardarInfoBaseDeDatos(rutaSitio,"reporteSitiosBackup.info")
+							print(color['verde']+"Se realizo el respaldo de la base de datos correctamente del sitio: "+sitio+color['off'])
+							print()
+							sitiosRespaldados[sitio]=True
+						else:
+							print(color['rojo']+">>>>>> No se pudo realizar el respaldo de la base de datos de "+sitio+" <<<<<<<<"+color['off'])
+							print()
+							sitiosRespaldados[sitio]=False
+							print("Para volver a intentar ingrese 'y' de lo contrario presione cualquier otra tecla: ",end="")
+							opcion=input()
+
 		else:
 			print("No se encontraron sitios Drupal")
 	
