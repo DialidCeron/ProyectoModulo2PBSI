@@ -14,6 +14,6 @@ echo "IP de la bd";
 read ip;
 
 echo "Proceso de migración";
-sudo drush migrate-upgrade --configure-only --legacy-db-url=pgsql://$dbuser:$dbpass@$ip/$dbname --legacy-root=/var/www/drupa2/sites/default/files
+sudo drush migrate-upgrade --configure-only --legacy-db-url=pgsql://$dbuser:$dbpass@$ip/$dbname --legacy-root=/var/www/drupal2/sites/default/files
 #sudo drush migrate-status
 sudo drush migrate-import --all
