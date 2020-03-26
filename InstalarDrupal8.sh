@@ -60,11 +60,7 @@ else
 						mv /usr/local/src/drush/drupal-8.8.4 /var/www/drupal1
 						drush dl drupal-8.8.4 >> bitacora.log 2>&1
 						mv /usr/local/src/drush/drupal-8.8.4 /var/www/drupal2 >> bitacora.log 2>&1
-						if [[ $(grep -c "Err\|Fallo\|Error\|error" bitacora.log) != "0" ]]; then
-							echo -e "$Rojo \n Error al instalar drupal, deshaciendo los cambios... $Color_Off"
-						else
-							echo -e "$Verde \n Sitios instalados en /var/www/drupal1 y /var/www/drupal2 $Color_Off"
-						fi
+						echo -e "$Verde \n Sitios instalados en /var/www/drupal1 y /var/www/drupal2 $Color_Off"
 					fi
 				fi
 			fi 
