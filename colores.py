@@ -6,4 +6,4 @@ color = {
 }
 
 def imprimir(c,mensaje):
-	print(c+mensaje+color['off'])
+	print(color[c]+mensaje+color['off'])

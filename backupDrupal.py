@@ -44,6 +44,9 @@ def guardarInfoBaseDeDatos(rutaSitio,nombreArchivo):
 		print(color['rojo']+"Error: No se logró obtener información de la base de datos"+color['off'],out)
 		
 		
+def eliminarArchivo(archivo):
+	if path.isfile(archivo):
+		system("rm "+archivo)
 		
 
 def realizarRespaldoDeSitios(ruta):
@@ -95,12 +98,12 @@ def realizarRespaldoDeSitios(ruta):
 				if comprimirDirectorio(rutaSitio):
 					print(color['verde']+"El sitio {0} se comprimio de forma correcta.{1}".format(sitio,color['off']))
 					nombreBackupBD="backup-"+sitio+"_"+\
-							datetime.now().strftime("%d-%m-%Y_%H_%M_%S")
+							datetime.now().strftime("%d-%m-%Y_%H_%M_%S")+".sql"
 					opcion="y"
 					while(opcion=="y"):
 						opcion="n"
 						if (system("cd "+rutaSitio+"; drush -v sql-dump --result-file="+\
-							path.join(directorioActual,nombreBackupBD+".sql"))==0):
+							path.join(directorioActual,nombreBackupBD))==0):
 							a=open("reporteSitiosBackup.info",'a')
 							a.write("sitio:"+sitio+"\n")
 							a.write("backupSitioName:"+sitio+".tar.gz\n")
@@ -114,6 +117,7 @@ def realizarRespaldoDeSitios(ruta):
 							print(color['rojo']+">>>>>> No se pudo realizar el respaldo de la base de datos de "+sitio+" <<<<<<<<"+color['off'])
 							print()
 							sitiosRespaldados[sitio]=False
+							eliminarArchivo(nombreBackupBD)
 							print("Para volver a intentar ingrese 'y' de lo contrario presione cualquier otra tecla: ",end="")
 							opcion=input()
 
