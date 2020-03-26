@@ -12,7 +12,6 @@ def parse():
 	parser = argparse.ArgumentParser(   prog = 'Actualizador de drupal 7 al 8',
 										usage= 'python3 actualizarDrupal.py -d directorioDelSitio',
                                         description = 'Script para la migración de Drupal 7 a Drupal 8.')
-
 	groupListaUsuarios = parser.add_mutually_exclusive_group()
 	parser.add_argument('-d','--directory',  type=str, help='Ruta del directorio en el que se encuentran\
 		los sitios drupal: Por default buscara en /var/www',dest='ruta',nargs='?',const='/var/www',default='/var/www')
