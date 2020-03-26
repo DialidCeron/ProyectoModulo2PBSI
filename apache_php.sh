@@ -22,10 +22,10 @@ else
 		sudo apt-get remove apache2 apache2-doc apache2-utils -y >> bitacora.log 2>&1
 	else
 		echo -e "$Cyan \n Instalando PHP y Requerimientos $Color_Off"
-		sudo apt-get install libapache2-mod-php php-common php-curl php-dev php-gd php-pear php-imagick php-xml php-mbstring php-cli -y >> bitacora.log 2>&1
+		sudo apt-get install php libapache2-mod-php php-common php-curl php-dev php-gd php-pear php-imagick php-xml php-mbstring php-cli php-pgsql -y >> bitacora.log 2>&1
 		if [[ $(grep -c "Err\|Fallo\|Error\|error" bitacora.log) != "0" ]]; then
 			echo -e "$Rojo \n Fallo al instalar PHP y dependencias, deshaciendo los cambios... $Color_Off"
-			sudo apt-get remove libapache2-mod-php php-common php-curl php-dev php-gd php-pear php-imagick php-xml php-mbstring php-cli -y >> bitacora.log 2>&1
+			sudo apt-get remove php libapache2-mod-php php-common php-curl php-dev php-gd php-pear php-imagick php-xml php-mbstring php-cli php-pgsql  -y >> bitacora.log 2>&1
 		else
 			echo -e "$Cyan \n Otorgando permisos para /var/www $Color_Off"
 			sudo chown -R www-data:www-data /var/www >> bitacora.log 2>&1
